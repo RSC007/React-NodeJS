@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Success } from "./Success";
 
 export const Sign = () => {
+  // States 
+  const [login, setLogin] = useState(false)
+
   const {
     handleSubmit,
     handleChange,
@@ -23,6 +27,7 @@ export const Sign = () => {
     },
     onSubmit: (values) => {
       console.log("Submit: ", values);
+      setLogin(!login)
     },
     validationSchema: Yup.object().shape({
       username: Yup.string().required("User name is required."),
@@ -40,6 +45,8 @@ export const Sign = () => {
   });
 
   return (
+    <>
+    {!login ? 
     <Box
       component="div"
       sx={{
@@ -139,6 +146,9 @@ export const Sign = () => {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </Box> :
+    <Success/>
+    }
+    </>
   );
 };
