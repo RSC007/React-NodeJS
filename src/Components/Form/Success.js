@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/system";
 
-export const Success = () => {
+export const Success = ({ description }) => {
   return (
     <Box
       component="div"
@@ -14,8 +14,8 @@ export const Success = () => {
     >
       <Box
         sx={{
-          width: 450,
-          height: 400,
+          width: 350,
+          height: 300,
           display: "flex",
           padding: "20px",
           flexDirection: "column",
@@ -31,8 +31,8 @@ export const Success = () => {
           }
         }}
       >
-        <h1>Success</h1>
-        <p style={{ color: 'black'}}>User Login succesfully!</p>
+        <h1>Success !!</h1>
+        <p style={{ color: 'black'}}>{description}</p>
       </Box>
     </Box>
   );
