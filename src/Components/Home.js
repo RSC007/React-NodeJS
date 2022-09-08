@@ -1,11 +1,20 @@
 import React from "react";
 import { Box, Button, Link as NavLink } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "../Api/axios";
+import useAuth from "../hooks/useAuth";
 
 const Home = () => {
   const navigate = useNavigate()
-
   const goBack = () => navigate(-1)
+  const { setAuth } = useAuth()
+
+  const logout = () => {
+    axios.get('/logout')
+    goBack()
+    setAuth({})
+  }
+
   return (
     <Box component='div' sx={{
       display: 'flex',
@@ -30,6 +39,9 @@ const Home = () => {
       </NavLink>
       <Button variant="outlined" onClick={goBack}>
         Go Back
+      </Button>
+      <Button variant="contained" onClick={logout}>
+        Logout
       </Button>
     </Box>
   );

@@ -1,8 +1,20 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../Api/axios";
+import useAuth from "../hooks/useAuth";
 
 const LinkPage = () => {
+  const navigate = useNavigate()
+  const goBack = () => navigate('/registor')
+  const { auth, setAuth } = useAuth()
+
+  const logout = () => {
+    axios.get('/logout')
+    goBack()
+    setAuth({})
+  }
+  
   return (
     <Box
       sx={{
@@ -27,6 +39,10 @@ const LinkPage = () => {
         <Link to="/admin">Admin</Link>
         <Link to="/editor">Editor</Link>
       </Box>
+
+      {auth?.username && <Button variant="contained" sx={{ marginTop: '5rem'}} onClick={logout}>
+        Logout
+      </Button>}
     </Box>
   );
 };

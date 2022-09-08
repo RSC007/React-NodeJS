@@ -12,6 +12,7 @@ import Editor from "./Components/Editor";
 import Admin from "./Components/Admin";
 import Home from "./Components/Home";
 import { RequiredAuth } from "./Components/RequiredAuth";
+import Missing from "./Components/Missing";
 
 export const App = () => {
   return (
@@ -37,6 +38,9 @@ export const App = () => {
         <Route element={<RequiredAuth allowedRoles={[ROLES_LIST.Admin]} />}>
           <Route path="admin" element={<Admin />} />
         </Route>
+
+        {/* Catch all other routes */}
+        <Route path="*" element={<Missing />} />
       </Route>
     </Routes>
   );

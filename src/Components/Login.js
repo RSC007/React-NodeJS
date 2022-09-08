@@ -8,12 +8,13 @@ import axios from "../Api/axios";
 import useAuth from "../hooks/useAuth";
 
 import { Success } from "./Common/Success";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { setAuth } = useAuth();
   const [isLogin, setIsLogin] = useState(false);
   const [err, setErr] = useState("");
+  const navigate = useNavigate()
 
   const {
     handleSubmit,
@@ -32,6 +33,7 @@ const Login = () => {
         setIsLogin(true);
         setErr("");
         setAuth({ ...values, accessToken: response.data.accessToken, roles: Object.values(response.data.roles) });
+        navigate(-1)
         console.log(response.data);
         console.log(response.accessToken);
         console.log(JSON.stringify(response));
