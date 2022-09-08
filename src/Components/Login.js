@@ -1,46 +1,39 @@
 import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useFormik } from "formik";
 
-import axios from "../../Api/axios";
+import axios from "../Api/axios";
+import useAuth from "../hooks/useAuth";
 
-import { Success } from "./Success";
+import { Success } from "./Common/Success";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Sign = () => {
-  // States
-  const [isSignIn, setIsSingIn] = useState(false);
+const Login = () => {
+  const { setAuth } = useAuth();
+  const [isLogin, setIsLogin] = useState(false);
   const [err, setErr] = useState("");
+  const navigate = useNavigate()
 
   const {
     handleSubmit,
     handleChange,
     handleBlur,
-    errors: {
-      username: errUsername,
-      password: errPassword,
-      confirmPassword: errConfirmPassword
-    },
+    errors: { username: errUsername, password: errPassword },
     ...formikValues
   } = useFormik({
     initialValues: {
       username: "",
-      password: "",
-      confirmPassword: ""
+      password: ""
     },
     onSubmit: async (values) => {
-      const { confirmPassword, username, password } = values;
       try {
-        const response = await axios.post(
-          "/register",
-          { username, password }
-          // {
-          //   headers: { 'Content-Type': 'applicaion/json', withCredentials: true },
-          // },
-        );
-        setIsSingIn(true);
+        const response = await axios.post("/auth", values);
+        setIsLogin(true);
         setErr("");
+        setAuth({ ...values, accessToken: response.data.accessToken, roles: Object.values(response.data.roles) });
+        navigate(-1)
         console.log(response.data);
         console.log(response.accessToken);
         console.log(JSON.stringify(response));
@@ -48,7 +41,7 @@ export const Sign = () => {
         if (!err?.response) {
           setErr("No server responce");
         } else if (err?.response?.status === 409) {
-          formikValues.setErrors({ username: err?.response?.data?.message });
+          setErr("Worng Credentials");
         } else {
           setErr("Registeration is filed!");
         }
@@ -56,54 +49,35 @@ export const Sign = () => {
     },
     validationSchema: Yup.object().shape({
       username: Yup.string().required("User name is required."),
-      password: Yup.mixed().required("Password is required."),
-      confirmPassword: Yup.mixed()
-        .required("Password is not matched!")
-        .when("password", {
-          is: (val) => (val && val.length > 0 ? true : false),
-          then: Yup.mixed().oneOf(
-            [Yup.ref("password")],
-            "Both password need to be the same"
-          )
-        })
+      password: Yup.mixed().required("Password is required.")
     })
   });
 
   return (
     <>
-      {!isSignIn ? (
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh"
-          }}
-        >
-          <Box
-            sx={{
-              width: 500,
-              height: 450,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 2,
-              border: 1,
-              "&:hover": {
-                // backgroundColor: "black"
-                // opacity: [0.9, 0.8, 0.7]
-              }
-            }}
-          >
+      <Box
+        sx={{
+          display: "flex",
+          height: "inherit",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
+          "&:hover": {
+            // backgroundColor: "black"
+            // opacity: [0.9, 0.8, 0.7]
+          }
+        }}
+      >
+        {!isLogin ? (
+          <>
             {err.length ? (
               <Box component="div" sx={{ borderBottom: 2, color: "red" }}>
                 {err}
               </Box>
             ) : null}
             <Box component="div" sx={{ borderBottom: 2 }}>
-              Sign In Here!
+              Login In Here!
             </Box>
             <Box component="div">
               <TextField
@@ -146,40 +120,32 @@ export const Sign = () => {
               )}
             </Box>
             <Box component="div">
-              <TextField
-                error={!!errConfirmPassword}
-                id="confirmPassword"
-                label="Confirm Password"
-                variant="outlined"
-                sx={{
-                  backgroundColor: "white",
-                  color: "black",
-                  margin: "3px"
-                }}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errConfirmPassword && (
-                <Box component="small" sx={{ color: "red", display: "block" }}>
-                  {errConfirmPassword}
-                </Box>
-              )}
-            </Box>
-            <Box component="div">
               {/* <Button variant="contained">Sign In</Button> */}
               <Button
                 onClick={handleSubmit}
-                sx={{ paddingX: "20px" }}
+                sx={{ paddingX: "20px", marginX: "10px" }}
                 variant="contained"
               >
-                Sing In
+                Login
+              </Button>
+              <Button variant="outlined">
+                <Link style={{ display: "block" }} to="/linkPage">
+                  Link Page
+                </Link>
               </Button>
             </Box>
-          </Box>
-        </Box>
-      ) : (
-        <Success description="User registeration succesfull !" />
-      )}
+            <Box component="p">
+              <Link style={{ display: "block" }} to="/registor">
+                New User Register
+              </Link>
+            </Box>
+          </>
+        ) : (
+          <Success description="User logedIn succesfull !" />
+        )}
+      </Box>
     </>
   );
 };
+
+export default Login;

@@ -1,5 +1,7 @@
 import React from "react";
 import { Box } from "@mui/system";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export const Success = ({ description }) => {
   return (
@@ -32,7 +34,12 @@ export const Success = ({ description }) => {
         }}
       >
         <h1>Success !!</h1>
-        <p style={{ color: 'black'}}>{description}</p>
+        <p style={{ color: "black" }}>{description}</p>
+        <Button variant="outlined">
+          <Link style={{ display: "block" }} to="/linkPage">
+            Link Page
+          </Link>
+        </Button>
       </Box>
     </Box>
   );

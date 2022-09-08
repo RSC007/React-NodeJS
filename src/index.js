@@ -1,15 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { App } from "./App";
 
-import { AuthProvide } from './Components/Context/AuthProvider';
+import { AuthProvide } from "./Context/AuthProvider";
 
-import { Layout } from './Components/Layout';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthProvide>
-      <Layout/>
-    </AuthProvide>
+    <BrowserRouter>
+      <AuthProvide>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </AuthProvide>
+    </BrowserRouter>
   </React.StrictMode>
 );
