@@ -36,7 +36,7 @@ const Sign = () => {
         const response = await axios.post(
           "/register",
           { username, password }
-          
+
           // {
           //   headers: { 'Content-Type': 'applicaion/json', withCredentials: true },
           // },
@@ -160,16 +160,21 @@ const Sign = () => {
             {/* <Button variant="contained">Sign In</Button> */}
             <Button
               onClick={handleSubmit}
-              sx={{ paddingX: "20px", marginX: '5px' }}
+              sx={{ paddingX: "20px", marginX: "5px" }}
               variant="contained"
             >
               Sing In
             </Button>
-            <Button variant="outlined" >
+            <Button variant="outlined">
               <Link style={{ display: "block" }} to="/linkPage">
                 Link Page
               </Link>
             </Button>
+          </Box>
+          <Box component="p">
+            <Link style={{ display: "block" }} to="/login">
+              Already have a account.
+            </Link>
           </Box>
         </Box>
       ) : (

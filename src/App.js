@@ -1,6 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router";
 
+import ROLES_LIST from "./roles";
+
 import { Layout } from "./Components/Layout";
 import Login from "./Components/Login";
 import Sign from "./Components/Sign";
@@ -24,9 +26,15 @@ export const App = () => {
 
         {/* Private Pages - We want protect these routes */}
         {/* before going any following page, it will go <RequiredPath /> first */}
-        <Route element={<RequiredAuth />}>
+        <Route element={<RequiredAuth allowedRoles={[ROLES_LIST.User]} />}>
           <Route path="/" element={<Home />} />
+        </Route>
+
+        <Route element={<RequiredAuth allowedRoles={[ROLES_LIST.Editor]} />}>
           <Route path="editor" element={<Editor />} />
+        </Route>
+
+        <Route element={<RequiredAuth allowedRoles={[ROLES_LIST.Admin]} />}>
           <Route path="admin" element={<Admin />} />
         </Route>
       </Route>

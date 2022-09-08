@@ -31,7 +31,7 @@ const Login = () => {
         const response = await axios.post("/auth", values);
         setIsLogin(true);
         setErr("");
-        setAuth({ ...values, ...response.data });
+        setAuth({ ...values, accessToken: response.data.accessToken, roles: Object.values(response.data.roles) });
         console.log(response.data);
         console.log(response.accessToken);
         console.log(JSON.stringify(response));
@@ -53,88 +53,95 @@ const Login = () => {
 
   return (
     <>
-      {!isLogin ? (
-        <Box
-          sx={{
-            display: "flex",
-            height: "inherit",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 2,
-            "&:hover": {
-              // backgroundColor: "black"
-              // opacity: [0.9, 0.8, 0.7]
-            }
-          }}
-        >
-          {err.length ? (
-            <Box component="div" sx={{ borderBottom: 2, color: "red" }}>
-              {err}
+      <Box
+        sx={{
+          display: "flex",
+          height: "inherit",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
+          "&:hover": {
+            // backgroundColor: "black"
+            // opacity: [0.9, 0.8, 0.7]
+          }
+        }}
+      >
+        {!isLogin ? (
+          <>
+            {err.length ? (
+              <Box component="div" sx={{ borderBottom: 2, color: "red" }}>
+                {err}
+              </Box>
+            ) : null}
+            <Box component="div" sx={{ borderBottom: 2 }}>
+              Login In Here!
             </Box>
-          ) : null}
-          <Box component="div" sx={{ borderBottom: 2 }}>
-            Login In Here!
-          </Box>
-          <Box component="div">
-            <TextField
-              error={!!errUsername}
-              id="username"
-              label="User Name"
-              variant="outlined"
-              sx={{
-                backgroundColor: "white",
-                color: "black",
-                margin: "3px"
-              }}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errUsername && (
-              <Box component="small" sx={{ color: "red", display: "block" }}>
-                {errUsername}
-              </Box>
-            )}
-          </Box>
-          <Box component="div">
-            <TextField
-              error={!!errPassword}
-              id="password"
-              label="Password"
-              variant="outlined"
-              sx={{
-                backgroundColor: "white",
-                color: "black",
-                margin: "3px"
-              }}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errPassword && (
-              <Box component="small" sx={{ color: "red", display: "block" }}>
-                {errPassword}
-              </Box>
-            )}
-          </Box>
-          <Box component="div">
-            {/* <Button variant="contained">Sign In</Button> */}
-            <Button
-              onClick={handleSubmit}
-              sx={{ paddingX: "20px", marginX: '10px' }}
-              variant="contained"
-            >
-              Login
-            </Button>
-            <Button variant="outlined" >
-              <Link style={{ display: "block" }} to="/linkPage">
-                Link Page
+            <Box component="div">
+              <TextField
+                error={!!errUsername}
+                id="username"
+                label="User Name"
+                variant="outlined"
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  margin: "3px"
+                }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errUsername && (
+                <Box component="small" sx={{ color: "red", display: "block" }}>
+                  {errUsername}
+                </Box>
+              )}
+            </Box>
+            <Box component="div">
+              <TextField
+                error={!!errPassword}
+                id="password"
+                label="Password"
+                variant="outlined"
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  margin: "3px"
+                }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errPassword && (
+                <Box component="small" sx={{ color: "red", display: "block" }}>
+                  {errPassword}
+                </Box>
+              )}
+            </Box>
+            <Box component="div">
+              {/* <Button variant="contained">Sign In</Button> */}
+              <Button
+                onClick={handleSubmit}
+                sx={{ paddingX: "20px", marginX: "10px" }}
+                variant="contained"
+              >
+                Login
+              </Button>
+              <Button variant="outlined">
+                <Link style={{ display: "block" }} to="/linkPage">
+                  Link Page
+                </Link>
+              </Button>
+            </Box>
+            <Box component="p">
+              <Link style={{ display: "block" }} to="/registor">
+                New User Register
               </Link>
-            </Button>
-          </Box>
-        </Box>
-      ) : (
-        <Success description="User logedIn succesfull !" />
-      )}
+            </Box>
+          </>
+        ) : (
+          <Success description="User logedIn succesfull !" />
+        )}
+      </Box>
     </>
   );
 };
